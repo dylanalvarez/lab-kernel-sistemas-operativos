@@ -11,7 +11,11 @@ Se debe setear el atributo (para el compilador GCC) 'aligned' de la variable, qu
 
 **¿A qué valor se está inicializando kstack? ¿Varía entre la versión C y la versión ASM?**
 
-(TODO)
+`kstack`, tanto en la versión C como en la versión ASM, se inicializa con ceros.
+
+En la versión C se debe a que, según el estándar, toda variable estática o global no inicializada explícitamente se inicializa con ceros.
+
+En la versión ASM se debe a que la directiva `.space size , fill` asume que 'fill' es 0 si no se lo explicita.
 
 **Explicar la diferencia entre las directivas .align y .p2align de as, y mostrar cómo alinear el stack del kernel a 4 KiB usando cada una de ellas.**
 
