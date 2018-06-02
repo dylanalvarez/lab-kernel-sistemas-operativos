@@ -4,7 +4,10 @@ Alinear datos significa situarlos en un offset de memoria igual a un múltiplo d
 
 **Mostrar la sintaxis de C/GCC para alinear a 32 bits el arreglo kstack anterior.**
 
-(TODO)
+Se debe setear el atributo (para el compilador GCC) 'aligned' de la variable, que especifica el mínimo alineamiento de la misma (en bytes, es decir en este caso, 4):
+
+`unsigned char kstack[8192] __attribute__ ((aligned (4)));
+`
 
 **¿A qué valor se está inicializando kstack? ¿Varía entre la versión C y la versión ASM?**
 
