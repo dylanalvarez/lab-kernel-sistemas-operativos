@@ -22,7 +22,12 @@ _start:
     // comparar con MULTIBOOT_BOOTLOADER_MAGIC, pero no usar
     // un salto a continuación, sino una instrucción CMOVcc
     // (copia condicional).
-    // ...
+
+    xor %ecx, %ecx
+    movl %edx, MULTIBOOT_BOOTLOADER_MAGIC
+    cmp %eax, %edx
+    cmovne %ecx, %ebx // If ax != MULTIBOOT_BOOTLOADER_MAGIC then save 0 in ebx
+    push %ebx
 
     call kmain
 halt:
@@ -34,4 +39,3 @@ halt:
 kstack:
     .space KSTACK_SIZE
 kstacktop:
-
