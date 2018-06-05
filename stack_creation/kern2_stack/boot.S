@@ -12,7 +12,7 @@ multiboot:
 _start:
     // Paso 1: Configurar el stack antes de llamar a kmain.
     movl $0, %ebp
-    movl $kstacktop, %esp
+    movl $kstack, %esp
     push %ebp
 
     // Paso 2: pasar la información multiboot a kmain. Si el
@@ -22,7 +22,12 @@ _start:
     // comparar con MULTIBOOT_BOOTLOADER_MAGIC, pero no usar
     // un salto a continuación, sino una instrucción CMOVcc
     // (copia condicional).
-    // ...
+
+    xor %ecx, %ecx
+    movl %edx, MULTIBOOT_BOOTLOADER_MAGIC
+    cmp %eax, %edx
+    cmovne %ecx, %ebx // If ax != MULTIBOOT_BOOTLOADER_MAGIC then save 0 in ebx
+    push %ebx
 
     call kmain
 halt:
@@ -33,5 +38,3 @@ halt:
 .p2align 12
 kstack:
     .space KSTACK_SIZE
-kstacktop:
-
