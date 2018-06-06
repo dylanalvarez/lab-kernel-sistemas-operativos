@@ -1,6 +1,6 @@
 QEMU := qemu-system-i386 -serial mon:stdio
 KERN := kern2
-BOOT := -kernel $(KERN)
+BOOT := -kernel $(KERN) $(QEMU_EXTRA)
 CFLAGS := -g -m32 -O1 -ffreestanding -std=c99 -Wall -Wextra -Wpedantic -fasm
 
 kern2: boot.o kern2.o write.o
