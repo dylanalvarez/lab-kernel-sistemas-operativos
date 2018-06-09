@@ -23,10 +23,10 @@ _start:
     // un salto a continuación, sino una instrucción CMOVcc
     // (copia condicional).
 
-    xor %ecx, %ecx
-    movl %edx, MULTIBOOT_BOOTLOADER_MAGIC
-    cmp %eax, %edx
-    cmovne %ecx, %ebx // If ax != MULTIBOOT_BOOTLOADER_MAGIC then save 0 in ebx
+    xor %ecx, %ecx // ecx = 0
+    movl $MULTIBOOT_BOOTLOADER_MAGIC, %edx // edx = magic
+    cmp %eax, %edx // if eax != magic then:
+    cmovne %ecx, %ebx // save 0 in ebx (else it will be the correct address of mbi)
     push %ebx
 
     call kmain
@@ -35,7 +35,8 @@ halt:
     jmp halt
 
 .data
-.p2align 12
+    .p2align 12
 kstack:
     .space KSTACK_SIZE
 kstacktop:
+

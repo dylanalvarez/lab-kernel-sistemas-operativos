@@ -3,7 +3,7 @@ KERN := kern2
 BOOT := -kernel $(KERN) $(QEMU_EXTRA)
 CFLAGS := -g -m32 -O1 -ffreestanding -std=c99 -Wall -Wextra -Wpedantic -fasm
 
-kern2: boot.o kern2.o write.o
+kern2: boot.o kern2.o write.o lib/string.o
 	ld -m elf_i386 -Ttext 0x100000 --entry _start $^ -o $@
 	# Verificar imagen Multiboot v1.
 	grub-file --is-x86-multiboot $@
