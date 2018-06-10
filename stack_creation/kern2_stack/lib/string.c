@@ -403,3 +403,16 @@ strlcat (char *dst, const char *src, size_t size)
     }
   return src_len + dst_len;
 }
+
+/* Our humble additions start here */
+
+char *strncat(char *dest, const char *src, size_t n) {
+  size_t dest_len = strlen(dest);
+  size_t pos;
+  for (pos = 0; pos < n && src[pos] != 0 ; pos++) {
+    dest[dest_len + pos] = src[pos];
+  }
+  dest[dest_len + pos] = 0;
+  return dest;
+}
+
