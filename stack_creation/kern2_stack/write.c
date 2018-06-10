@@ -10,3 +10,18 @@ void vga_write(const char *s, int8_t linea, uint8_t color) {
     }
 }
 
+static size_t int_width(uint64_t val) {
+    return 9999999;
+}
+
+bool fmt_int(uint64_t val, char *s, size_t bufsize) {
+    size_t l = int_width(val);
+
+    if (l >= bufsize)  // Pregunta: ¿por qué no "l > bufsize"?
+        return false;
+
+    s += l;
+    // ...
+    return true;
+}
+

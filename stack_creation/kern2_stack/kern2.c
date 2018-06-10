@@ -14,6 +14,20 @@ void kmain(const multiboot_info_t *mbi) {
         // Forma de hacer lo mismo con strncat:
         //strncat(buf, (char *) mbi->cmdline, BUFLEN - strlen(buf) - 1);
         vga_write(buf, 9, 0x07);
+        
+        
+        
+        char mem[256] = "Physical memory: ";
+        char tmp[64] = "";
+
+        if (fmt_int(999, tmp, sizeof tmp)) {
+            strlcat(mem, tmp, sizeof mem);
+            strlcat(mem, "MiB total", sizeof mem);
+        }
+
+        // ...
+
+        vga_write(mem, 10, 0x07);
     }
 }
 
