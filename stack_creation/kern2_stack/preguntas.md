@@ -40,3 +40,7 @@ kstack:
     .p2align 12
     .space 8192
 ```
+
+**Explicar cómo se comporta strlcat(3) si, erróneamente, se declarase buf con tamaño 12. ¿Introduce algún error el código?**
+
+Si no se modifica el argumento `size`, ocurre un buffer overflow (de hecho el kernel crashea). Esto se debe a que strlcat se permite a sí mismo escribir hasta `size` caracteres a partir del comienzo del string destino. Si se setea dicho argumento en 12, simplemente se conservarán los primeros 11 caracteres del string a imprimir por pantalla.
