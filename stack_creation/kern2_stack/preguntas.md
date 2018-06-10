@@ -44,3 +44,24 @@ kstack:
 **Explicar cómo se comporta strlcat(3) si, erróneamente, se declarase buf con tamaño 12. ¿Introduce algún error el código?**
 
 Si no se modifica el argumento `size`, ocurre un buffer overflow (de hecho el kernel crashea). Esto se debe a que strlcat se permite a sí mismo escribir hasta `size` caracteres a partir del comienzo del string destino. Si se setea dicho argumento en 12, simplemente se conservarán los primeros 11 caracteres del string a imprimir por pantalla.
+
+**Compilar el siguiente programa, y explicar por qué se imprimen dos líneas distintas, en lugar de la misma dos veces:**
+
+```
+#include <stdio.h>
+
+static void printf_sizeof_buf(char buf[256]) {
+    printf("sizeof buf = %zu\n", sizeof buf);
+}
+
+int main(void) {
+    char buf[256];
+    printf("sizeof buf = %zu\n", sizeof buf);
+    printf_sizeof_buf(buf);
+}
+```
+Los nombres de array no pueden ser argumentos en una función: al ser pasados a una función lo que se pasa es el puntero equivalente.
+
+Entonces, por más que uno defina a su función como 'tomando un array de 256 caracteres', lo que es en realidad ese parámetro es la dirección del primer elemento de dicho array. Entonces, suele ser considerado como más claro siempre usar notación de punteros y no de arreglos al declarar funciones.
+
+En este caso puntual, se imprime primero el tamaño del array de char `buf`, y luego el tamaño del puntero a char `buf`.
