@@ -1,6 +1,6 @@
 #include "decls.h"
 #include "multiboot.h"
-#include "lib/string.h"
+#include <string.h>
 
 #define BUFLEN 256
 
