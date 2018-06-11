@@ -20,7 +20,7 @@ void kmain(const multiboot_info_t *mbi) {
         char mem[256] = "Physical memory: ";
         char tmp[64] = "";
 
-        if (fmt_int(999, tmp, sizeof tmp)) {
+        if (fmt_int(123, tmp, sizeof tmp)) {
             strlcat(mem, tmp, sizeof mem);
             strlcat(mem, "MiB total", sizeof mem);
         }
