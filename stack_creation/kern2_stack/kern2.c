@@ -14,18 +14,30 @@ void kmain(const multiboot_info_t *mbi) {
         // Forma de hacer lo mismo con strncat:
         //strncat(buf, (char *) mbi->cmdline, BUFLEN - strlen(buf) - 1);
         vga_write(buf, 9, 0x07);
-        
-        
-        
+    }
+    if (mbi->flags & 1) { // bit 1 of flags is set
         char mem[256] = "Physical memory: ";
         char tmp[64] = "";
 
-        if (fmt_int(123, tmp, sizeof tmp)) {
+        uint32_t mem_total = (mbi->mem_lower + mbi->mem_upper) >> 10; // KiB to MiB
+
+        if (fmt_int(mem_total, tmp, sizeof tmp)) {
             strlcat(mem, tmp, sizeof mem);
             strlcat(mem, "MiB total", sizeof mem);
         }
-
-        // ...
+        
+        if (fmt_int(mbi->mem_lower, tmp, sizeof tmp)) {
+            strlcat(mem, " (", sizeof mem);
+            strlcat(mem, tmp, sizeof mem);
+            strlcat(mem, "KiB base", sizeof mem);
+            if (fmt_int(mbi->mem_upper, tmp, sizeof tmp)) {
+                strlcat(mem, ", ", sizeof mem);
+                strlcat(mem, tmp, sizeof mem);
+                strlcat(mem, "KiB extended)", sizeof mem);
+            } else {
+                strlcat(mem, ")", sizeof mem);
+            }
+        }
 
         vga_write(mem, 10, 0x07);
     }
