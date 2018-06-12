@@ -41,7 +41,7 @@ void kmain(const multiboot_info_t *mbi) {
             }
         }
 
-        // vga_write(mem, 10, 0x07);
+        vga_write(mem, 10, 0x07);
         two_stacks();
     }
 }

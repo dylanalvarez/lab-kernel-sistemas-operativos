@@ -1,0 +1,3 @@
+stacks.S 38 y 44:
+    que hay que restaurar? sin restaurar todo funca
+
