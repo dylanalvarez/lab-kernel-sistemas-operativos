@@ -1,9 +1,5 @@
-
-// stacks.S
 #define USTACK_SIZE 4096
 
-
-// stacks.S continuado
 .align 4
 .text
 .globl two_stacks
@@ -54,7 +50,6 @@ two_stacks:
         leave
         ret
 
-
 .data
         .align 4096
 stack1:
@@ -70,3 +65,4 @@ msg1:
         .asciz "vga_write() from stack1"
 msg2:
         .asciz "vga_write() from stack2"
+

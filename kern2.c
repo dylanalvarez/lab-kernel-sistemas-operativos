@@ -6,9 +6,7 @@
 
 extern void two_stacks();
 
-void kmain(const multiboot_info_t *mbi) {
-    vga_write("kern2 loading.............", 8, 0x70);
-
+void print_cmdline(const multiboot_info_t *mbi) {
     if (mbi->flags & (1 << 2)) { // bit 2 of flags is set
         char buf[BUFLEN] = "cmdline: ";
         // Aquí usar strlcat() para concatenar cmdline a buf.
@@ -17,7 +15,10 @@ void kmain(const multiboot_info_t *mbi) {
         //strncat(buf, (char *) mbi->cmdline, BUFLEN - strlen(buf) - 1);
         vga_write(buf, 9, 0x07);
     }
-    if (mbi->flags & 1) { // bit 1 of flags is set
+}
+
+void print_memory_size(const multiboot_info_t *mbi) {
+        if (mbi->flags & 1) { // bit 1 of flags is set
         char mem[256] = "Physical memory: ";
         char tmp[64] = "";
 
@@ -42,6 +43,13 @@ void kmain(const multiboot_info_t *mbi) {
         }
 
         vga_write(mem, 10, 0x07);
-        two_stacks();
     }
 }
+
+void kmain(const multiboot_info_t *mbi) {
+    vga_write("kern2 loading.............", 8, 0x70);
+    print_cmdline(mbi);
+    print_memory_size(mbi);
+    two_stacks();
+}
+

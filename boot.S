@@ -26,7 +26,8 @@ _start:
     xor %ecx, %ecx // ecx = 0
     movl $MULTIBOOT_BOOTLOADER_MAGIC, %edx // edx = magic
     cmp %eax, %edx // if eax != magic then:
-    cmovne %ecx, %ebx // save 0 in ebx (else it will be the correct address of mbi)
+    cmovne %ecx, %ebx // save 0 in ebx (else it will be
+                      // the correct address of mbi)
     push %ebx
 
     call kmain
