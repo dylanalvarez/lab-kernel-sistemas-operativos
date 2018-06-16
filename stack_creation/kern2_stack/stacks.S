@@ -11,6 +11,9 @@ two_stacks:
         // Preámbulo estándar
         push %ebp
         movl %esp, %ebp
+        
+        // Guardo los registros callee saved que voy a pisar
+        push %ebx
 
         // Registros para apuntar a stack1 y stack2.
         mov $stack1_top, %eax
@@ -35,14 +38,19 @@ two_stacks:
         call vga_write
 
         // Restaurar stack original. ¿Es %ebp suficiente?
-        // movl ..., %esp
+        // No es suficiente porque pusheamos %ebx antes:
+        movl %ebp, %esp
+        sub %esp, 4
 
         // Realizar segunda llamada con stack2.
         leal -12(%ebx), %esp
         call vga_write
 
         // Restaurar registros callee-saved, si se usaron.
-
+        movl %ebp, %esp // Restauro el
+        sub %esp, 4     // stack original
+        pop %ebx
+        
         leave
         ret
 
