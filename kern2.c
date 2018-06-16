@@ -3,8 +3,10 @@
 #include <string.h>
 
 #define BUFLEN 256
+#define USTACK_SIZE 4096
 
 extern void two_stacks();
+extern void task_exec(uintptr_t entry, uintptr_t stack);
 
 void print_cmdline(const multiboot_info_t *mbi) {
     if (mbi->flags & (1 << 2)) { // bit 2 of flags is set
@@ -46,10 +48,50 @@ void print_memory_size(const multiboot_info_t *mbi) {
     }
 }
 
+static uint8_t stack1[USTACK_SIZE] __attribute__((aligned(4096)));
+static uint8_t stack2[USTACK_SIZE] __attribute__((aligned(4096)));
+
+void two_stacks_c() {
+    // Inicializar al *tope* de cada pila.
+    uintptr_t *a = (uintptr_t *) &stack1[USTACK_SIZE - 1];
+    uintptr_t *b = (uintptr_t *) &stack2[USTACK_SIZE - 1];
+
+    // Preparar, en stack1, la llamada:
+    // vga_write("vga_write() from stack1", 15, 0x57);
+
+    *(--a) = 0x57;
+    *(--a) = 15;
+    *(--a) = (uintptr_t) "vga_write() from stack1";
+
+    // Preparar, en s2, la llamada:
+    // vga_write("vga_write() from stack2", 16, 0xD0);
+
+    b -= 3;
+    b[0] = (uintptr_t) "vga_write() from stack2";
+    b[1] = 16;
+    b[2] = 0xD0;
+
+    // Primera llamada usando task_exec().
+    task_exec((uintptr_t) vga_write, (uintptr_t) a);
+
+    // Segunda llamada con ASM directo. Importante: no
+    // olvidar restaurar el valor de %esp al terminar, y
+    // compilar con: -fasm -fno-omit-frame-pointer.
+    asm("push %%ebx;"       // Guardo ebx (callee saved register)
+        "movl %%esp, %%ebx;"// Lo uso para guardar tope de stack
+        "movl %0, %%esp;"   // Cambio de stack
+        "call *%1;"         // Llamo a vga_write
+        "movl %%ebx, %%esp;"// Restauro el tope de stack
+        "pop %%ebx;"        // Restauro ebx
+        : /* no outputs */
+        : "r"(b), "r"(vga_write));
+}
+
 void kmain(const multiboot_info_t *mbi) {
     vga_write("kern2 loading.............", 8, 0x70);
+    two_stacks();
+    two_stacks_c();
     print_cmdline(mbi);
     print_memory_size(mbi);
-    two_stacks();
 }
 
