@@ -15,8 +15,13 @@ extern void task_swap(uintptr_t *esp);
 extern void task_exec(uintptr_t entry, uintptr_t stack);
 
 static void yield() {
-    if (esp)
-        task_swap(&esp);
+    if (esp) task_swap(&esp);
+}
+
+static void exit() {
+    uintptr_t tmp = esp;
+    esp = 0;
+    if (tmp) task_swap(&tmp);
 }
 
 static void contador_yield(unsigned lim, uint8_t linea, char color) {
@@ -68,9 +73,9 @@ void contador_run() {
     b[3] = 0;
 
     b[4] = (uintptr_t) contador_yield; // return address
-    b[5] = (uintptr_t) contador_yield; // esp argument for
+    b[5] = (uintptr_t) exit;           // esp argument for
                                        // task_swap
-    b[6] = 100;     // 3 function arguments
+    b[6] = 50;     // 3 function arguments
     b[7] = 1;
     b[8] = 0x4F;
     

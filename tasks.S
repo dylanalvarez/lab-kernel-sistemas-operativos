@@ -35,10 +35,10 @@ task_swap:
         // los offset 0, 4, 8 y 12 corresponden a los 4 pushes
         // de arriba, el offset 16 corresponde a la dirección de
         // retorno y finalmente el 20 al parámetro buscado.
-        movl %esp, %eax    // esp to eax
+        movl %esp, %eax     // esp to eax ('saved esp')
         movl 20(%esp), %ecx // given pointer to ecx
-        movl (%ecx), %esp  // pointer's content to esp
-        movl %eax, (%ecx)  // saved esp to pointer's content
+        movl (%ecx), %esp   // pointer's content to esp
+        movl %eax, (%ecx)   // 'saved esp' to pointer's content
         
         pop %ebp
         pop %edi

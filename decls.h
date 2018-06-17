@@ -18,5 +18,7 @@ vga_write2(const char *s, int8_t linea, uint8_t color);
 // no haber espacio suficiente no hace nada y devuelve false.
 bool fmt_int(uint64_t val, char *s, size_t bufsize);
 
+void contador_run();
+
 #endif
 
