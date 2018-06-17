@@ -22,6 +22,8 @@ void contador_run();
 
 void idt_init();
 
+void irq_init();
+
 void idt_install(uint8_t n, void (*handler)(void));
 
 #endif

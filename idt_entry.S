@@ -10,6 +10,32 @@ ack_irq:
 
 
 //////////////////////////////////
+.globl divzero
+divzero:
+        // Guardar registros.
+        push %eax
+        push %edx
+        push %ecx
+        
+        // Preparar argumentos de la llamada.
+        movl $divzero_msg, %eax
+        movl $17, %edx
+        
+        // Invocar a vga_write_cyan()
+        call vga_write_cyan
+        
+        // Incremento %ebx
+        inc %ebx
+        
+        // Restaurar registros.
+        pop %ecx
+        pop %edx
+        pop %eax
+        
+        jmp ack_irq
+        
+
+//////////////////////////////////
 .globl timer_asm
 timer_asm:
         // Guardar registros.
@@ -54,5 +80,6 @@ breakpoint:
 .data
 breakpoint_msg:
         .asciz "Hello, breakpoint"
-
+divzero_msg:
+        .asciz "Se divide por ++ebx"
 

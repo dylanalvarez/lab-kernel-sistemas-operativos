@@ -10,6 +10,11 @@ void vga_write(const char *s, int8_t linea, uint8_t color) {
     }
 }
 
+void __attribute__((regparm(2)))
+vga_write_cyan(const char *s, int8_t linea) {
+    vga_write(s, linea, 0xB0);
+}
+
 char digit_to_char(uint64_t digit) {
     if (digit == 0) return '0';
     if (digit == 1) return '1';
