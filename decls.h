@@ -20,5 +20,8 @@ bool fmt_int(uint64_t val, char *s, size_t bufsize);
 
 void contador_run();
 
-#endif
+void idt_init();
 
+void idt_install(uint8_t n, void (*handler)(void));
+
+#endif

@@ -65,3 +65,15 @@ Los nombres de array no pueden ser argumentos en una función: al ser pasados a 
 Entonces, por más que uno defina a su función como 'tomando un array de 256 caracteres', lo que es en realidad ese parámetro es la dirección del primer elemento de dicho array. Entonces, suele ser considerado como más claro siempre usar notación de punteros y no de arreglos al declarar funciones.
 
 En este caso puntual, se imprime primero el tamaño del array de char `buf`, y luego el tamaño del puntero a char `buf`.
+
+**Cuantos bytes ocupa una entrada en la IDT?**
+Ocupa 8 Bytes
+
+**¿Cuántas entradas como máximo puede albergar la IDT?**
+256 entradas
+
+**¿Cuál es el valor máximo aceptable para el campo limit del registro IDTR?**
+2047 ya que son 256 entradas de 8 bytes. Por lo tanto tengo una tabla de 2048 entradas, de 0 a 2047
+
+**Indicar qué valor exacto tomará el campo limit para una IDT de 64 descriptores solamente.**
+Seria 64*8 - 1 que es 511 bytes.
