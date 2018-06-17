@@ -8,6 +8,7 @@ static struct Gate idt[256];
 extern void breakpoint();
 extern void ack_irq();
 extern void timer_asm();
+extern void keyboard_asm();
 extern void divzero();
 
 void idt_init() {
@@ -61,8 +62,8 @@ void irq_init() {
     
     // (2) Instalar manejadores.
     idt_install(T_TIMER, timer_asm);
-    idt_install(T_KEYBOARD, divzero);
-    
+    // idt_install(T_KEYBOARD, divzero);
+    idt_install(T_KEYBOARD, keyboard_asm);
     // (3) Habilitar interrupciones.
     asm("sti");
 }

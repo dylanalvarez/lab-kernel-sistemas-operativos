@@ -96,7 +96,6 @@ void kmain(const multiboot_info_t *mbi) {
     two_stacks_c();
     print_cmdline(mbi);
     print_memory_size(mbi);
-    contador_run();
 
     // Código ejercicio kern2-idt.
     idt_init();
@@ -108,4 +107,6 @@ void kmain(const multiboot_info_t *mbi) {
     : "0"(18), "1"(0xE0), "b"(1), "d"(0));
     vga_write2("Funciona vga_write2?", linea, color);
     //vga_write2("Funciona vga_write2?", 18, 0xE0);
+    
+    contador_run();
 }

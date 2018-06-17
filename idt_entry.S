@@ -34,6 +34,24 @@ divzero:
         
         jmp ack_irq
         
+        
+//////////////////////////////////
+.globl keyboard_asm
+keyboard_asm:
+        // Guardar registros.
+        push %eax
+        push %edx
+        push %ecx
+        
+        call keyboard
+        
+        // Restaurar registros.
+        pop %ecx
+        pop %edx
+        pop %eax
+        
+        jmp ack_irq
+
 
 //////////////////////////////////
 .globl timer_asm
