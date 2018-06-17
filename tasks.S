@@ -17,3 +17,33 @@ task_exec:
         leave
         ret
 
+.globl task_swap
+task_swap:
+        // Pone en ejecución la tarea cuyo stack está en ‘*esp’,
+        // cuyo valor se intercambia por el valor actual de %esp.
+        // Guarda y restaura todos los callee-called registers.
+        // void task_swap(uintptr_t *esp);
+        
+        push %ebx
+        push %esi
+        push %edi
+        push %ebp
+        
+        // Como no tengo el 'ancla' que es ebp, tengo que
+        // determinar el offset para el parametro de la
+        // funcion respecto de esp:
+        // los offset 0, 4, 8 y 12 corresponden a los 4 pushes
+        // de arriba, el offset 16 corresponde a la dirección de
+        // retorno y finalmente el 20 al parámetro buscado.
+        movl %esp, %eax    // esp to eax
+        movl 20(%esp), %ecx // given pointer to ecx
+        movl (%ecx), %esp  // pointer's content to esp
+        movl %eax, (%ecx)  // saved esp to pointer's content
+        
+        pop %ebp
+        pop %edi
+        pop %esi
+        pop %ebx
+
+        ret
+

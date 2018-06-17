@@ -93,6 +93,7 @@ void kmain(const multiboot_info_t *mbi) {
     two_stacks_c();
     print_cmdline(mbi);
     print_memory_size(mbi);
+    contador_run();
     vga_write2("Funciona vga_write2?", 18, 0xE0);
 }
 
