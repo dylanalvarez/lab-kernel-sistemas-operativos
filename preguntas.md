@@ -77,3 +77,17 @@ Ocupa 8 Bytes
 
 **Indicar qué valor exacto tomará el campo limit para una IDT de 64 descriptores solamente.**
 Seria 64*8 - 1 que es 511 bytes.
+
+**(kern2-isr, paso 3) ¿Qué representa cada valor?**
+%esp indica que se pushearon 3 valores: en orden: $eflags, $cs, $eip (valor de retorno).
+
+**(kern2-isr, paso 3) Explicar diferencias**
+iret hace lo mismo que ret pero además de hacer pop de la dirección de retorno para saltar a ella hace pop de lo que se pusheó durante la instruccion int3 para restaurar los valores originales de eflags. Entonces el stack pointer en la version B es 8bytes menor (por haber hecho 2 pop menos) y eflags toma en la versión A el valor previo a la interrupción ([ AF ]), mientras que en el B el valor que tuvo durante la interrupcion ([ PF ]).
+
+**(kern2-isr, version final de breakpoint) Indicar como guardar registros**
+Los registros que necesitamos guardar son aquellos que vga_write modifique sin restaurar (es decir los caller-saved: eax, ecx y edx) y los que modifique el código circundante. Para cargar los argumentos de vga_write2 se usan los mismos registros caller-saved así que no hay diferencia entre vga_write y vga_write 2. Entonces: la opción A y B son correctas (si bien la A guarda registros 'de más') y la C no.
+
+No es necesario restaurar EFLAGS a mano porque es parte de la responsabilidad de la instrucción iret.
+
+vga_write se ejecuta en el mismo stack que el handler que la llamó. En este caso, como no cambia el nivel de privilegio al pasar al handler, se ejecuta todo en el mismo stack.
+
