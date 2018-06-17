@@ -24,6 +24,6 @@ qemu-gdb: $(KERN)
 	$(QEMU) -kernel kern2 -S -gdb tcp:127.0.0.1:7508 $(BOOT)
 
 gdb:
-	gdb -q -s kern2 -n -ex 'target remote 127.0.0.1:7508' -tui
+	gdb -q -s kern2 -n -ex 'target remote 127.0.0.1:7508'
 
 .PHONY: clean qemu qemu-gdb gdb

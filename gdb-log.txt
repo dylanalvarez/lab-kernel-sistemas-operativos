@@ -1,0 +1,170 @@
+PARTE A:
+
+gdb -q -s kern2 -n -ex 'target remote 127.0.0.1:7508'
+Reading symbols from kern2...done.
+Remote debugging using 127.0.0.1:7508
+0x0000fff0 in ?? ()
+(gdb) display/i $pc
+1: x/i $pc
+=> 0xfff0:	add    %al,(%eax)
+(gdb) break idt_init
+Breakpoint 1 at 0x100e4a: file interrupts.c, line 10.
+(gdb) c
+Continuing.
+
+Breakpoint 1, idt_init () at interrupts.c:10
+10	  idt_install(T_BRKPT, breakpoint);
+1: x/i $pc
+=> 0x100e4a <idt_init+3>:	push   $0x100e75
+(gdb) finish
+Run till exit from #0  idt_init () at interrupts.c:10
+kmain (mbi=0x9500) at kern2.c:100
+100	    asm("int3");  // (b)
+1: x/i $pc
+=> 0x1002f5 <kmain+55>:	int3   
+(gdb) x/10i $pc
+=> 0x1002f5 <kmain+55>:	int3   
+   0x1002f6 <kmain+56>:	mov    $0xe0,%ecx
+   0x1002fb <kmain+61>:	mov    $0x12,%edx
+   0x100300 <kmain+66>:	mov    $0x101173,%eax
+   0x100305 <kmain+71>:	call   0x100c58 <vga_write2>
+   0x10030a <kmain+76>:	add    $0x10,%esp
+   0x10030d <kmain+79>:	mov    -0x4(%ebp),%ebx
+   0x100310 <kmain+82>:	leave  
+   0x100311 <kmain+83>:	ret    
+   0x100312 <vga_write>:	push   %ebp
+(gdb) print $esp
+$1 = (void *) 0x104fd8
+(gdb) x/xw $esp
+0x104fd8:	0x00009500
+(gdb) p $cs
+$2 = 8
+(gdb) p $eflags
+$3 = [ AF ]
+(gdb) p/x $eflags
+$4 = 0x12
+(gdb) stepi
+breakpoint () at idt_entry.S:4
+4	    test %eax, %eax
+1: x/i $pc
+=> 0x100e76 <breakpoint+1>:	test   %eax,%eax
+(gdb) p $esp
+$5 = (void *) 0x104fcc
+(gdb) x/3wx $sp
+0x104fcc:	0x001002f6	0x00000008	0x00000012
+(gdb) print $eflags
+$6 = [ AF ]
+(gdb) p/x $eflags
+$7 = 0x12
+(gdb) stepi
+5	    iret
+1: x/i $pc
+=> 0x100e78 <breakpoint+3>:	iret   
+(gdb) print $eflags
+$8 = [ PF ]
+(gdb) p/x $eflags
+$9 = 0x6
+(gdb) stepi
+kmain (mbi=0x9500) at kern2.c:102
+102	    vga_write2("Funciona vga_write2?", 18, 0xE0);
+1: x/i $pc
+=> 0x1002f6 <kmain+56>:	mov    $0xe0,%ecx
+(gdb) display/i $pc
+2: x/i $pc
+=> 0x1002f6 <kmain+56>:	mov    $0xe0,%ecx
+(gdb) print $esp
+$10 = (void *) 0x104fd8
+(gdb) x/xw $esp
+0x104fd8:	0x00009500
+(gdb) print $cs
+$11 = 8
+(gdb) print $eflags
+$12 = [ AF ]
+(gdb) print/x $eflags
+$13 = 0x12
+
+PARTE B:
+
+gdb -q -s kern2 -n -ex 'target remote 127.0.0.1:7508'
+Reading symbols from kern2...done.
+Remote debugging using 127.0.0.1:7508
+0x0000fff0 in ?? ()
+(gdb) display/i $pc
+1: x/i $pc
+=> 0xfff0:	add    %al,(%eax)
+(gdb) break idt_init
+Breakpoint 1 at 0x100e4a: file interrupts.c, line 10.
+(gdb) c
+Continuing.
+
+Breakpoint 1, idt_init () at interrupts.c:10
+10	  idt_install(T_BRKPT, breakpoint);
+1: x/i $pc
+=> 0x100e4a <idt_init+3>:	push   $0x100e75
+(gdb) finish
+Run till exit from #0  idt_init () at interrupts.c:10
+kmain (mbi=0x9500) at kern2.c:100
+100	    asm("int3");  // (b)
+1: x/i $pc
+=> 0x1002f5 <kmain+55>:	int3   
+(gdb) x/10i $pc
+=> 0x1002f5 <kmain+55>:	int3   
+   0x1002f6 <kmain+56>:	mov    $0xe0,%ecx
+   0x1002fb <kmain+61>:	mov    $0x12,%edx
+   0x100300 <kmain+66>:	mov    $0x101173,%eax
+   0x100305 <kmain+71>:	call   0x100c58 <vga_write2>
+   0x10030a <kmain+76>:	add    $0x10,%esp
+   0x10030d <kmain+79>:	mov    -0x4(%ebp),%ebx
+   0x100310 <kmain+82>:	leave  
+   0x100311 <kmain+83>:	ret    
+   0x100312 <vga_write>:	push   %ebp
+(gdb) print $esp
+$1 = (void *) 0x104fd8
+(gdb) x/xw $esp
+0x104fd8:	0x00009500
+(gdb) p $cs
+$2 = 8
+(gdb) p $eflags
+$3 = [ AF ]
+(gdb) p/x $eflags
+$4 = 0x12
+(gdb) stepi
+breakpoint () at idt_entry.S:4
+4	    test %eax, %eax
+1: x/i $pc
+=> 0x100e76 <breakpoint+1>:	test   %eax,%eax
+(gdb) p $esp
+$5 = (void *) 0x104fcc
+(gdb) x/3wx $sp
+0x104fcc:	0x001002f6	0x00000008	0x00000012
+(gdb) print $eflags
+$6 = [ AF ]
+(gdb) p/x $eflags
+$7 = 0x12
+(gdb) stepi
+5	    ret
+1: x/i $pc
+=> 0x100e78 <breakpoint+3>:	ret    
+(gdb) print $eflags
+$8 = [ PF ]
+(gdb) p/x $eflags
+$9 = 0x6
+(gdb) stepi
+kmain (mbi=0x9500) at kern2.c:102
+102	    vga_write2("Funciona vga_write2?", 18, 0xE0);
+1: x/i $pc
+=> 0x1002f6 <kmain+56>:	mov    $0xe0,%ecx
+(gdb) display/i $pc
+2: x/i $pc
+=> 0x1002f6 <kmain+56>:	mov    $0xe0,%ecx
+(gdb) print $esp
+$10 = (void *) 0x104fd0
+(gdb) x/xw $esp
+0x104fd0:	0x00000008
+(gdb) print $cs
+$11 = 8
+(gdb) print $eflags
+$12 = [ PF ]
+(gdb) print/x $eflags
+$13 = 0x6
+
