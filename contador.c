@@ -72,9 +72,11 @@ void contador_run() {
     b[2] = 0;       // saved registers
     b[3] = 0;
 
-    b[4] = (uintptr_t) contador_yield; // return address
-    b[5] = (uintptr_t) exit;           // esp argument for
-                                       // task_swap
+    
+    b[4] = (uintptr_t) contador_yield; // task_swap will return
+                                       // to this addr
+    b[5] = (uintptr_t) exit;           // contador_yield will
+                                       // return to this addr
     b[6] = 50;     // 3 function arguments
     b[7] = 1;
     b[8] = 0x4F;
