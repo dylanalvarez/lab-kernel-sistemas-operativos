@@ -6,7 +6,6 @@
 static struct Task Tasks[MAX_TASK];
 static struct Task *current;
 
-
 uint32_t edi;
 uint32_t esi;
 uint32_t ebp;
@@ -22,37 +21,14 @@ uint16_t padding;
 uint32_t eflags;
 
 
-static void testtest() {
-  while (1) {
-    vga_write("kern2 testing.............", 2, 0x70);
-  }
-}
-
-
 void sched_init() {
     for (int i = 0; i < MAX_TASK; i++) {
       Tasks[i].status = FREE;
       Tasks[i].pid = i;
     }
-
+    spawn(0);
     current = &Tasks[0];
-
-    uint8_t* stack = &current->stack[4096];
-    current->frame = stack - sizeof(struct TaskFrame);
-    current->frame->edi = 0;
-    current->frame->esi = 0;
-    current->frame->ebp = 0;
-    current->frame->esp = current->frame;
-    current->frame->ebx = 0;
-    current->frame->edx = 0;
-    current->frame->ecx = 0;
-    current->frame->eax = 0;
-    current->frame->eip = 0;
-    current->frame->cs = CODE_SEGMENT;
-    current->frame->padding = 0;
-    current->frame->eflags = INTERRUPT_ENABLE_FLAG;
     current->status = RUNNING;
-
 }
 
 void spawn(void (*entry)(void)) {
@@ -61,12 +37,11 @@ void spawn(void (*entry)(void)) {
       index++;
     }
     uint8_t* stack = &Tasks[index].stack[4096];
-    Tasks[index].frame = stack - sizeof(struct TaskFrame);
-
+    Tasks[index].frame = (struct TaskFrame *)(stack - sizeof(struct TaskFrame));
     Tasks[index].frame->edi = 0;
     Tasks[index].frame->esi = 0;
     Tasks[index].frame->ebp = 0;
-    Tasks[index].frame->esp = Tasks[index].frame;
+    Tasks[index].frame->esp = (uint32_t) Tasks[index].frame;
     Tasks[index].frame->ebx = 0;
     Tasks[index].frame->edx = 0;
     Tasks[index].frame->ecx = 0;
