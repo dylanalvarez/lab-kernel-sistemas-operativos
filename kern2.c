@@ -89,21 +89,15 @@ void two_stacks_c() {
 }
 
 static void contador1() {
-  while (1) {
-    vga_write("kern2 testing.............", 2, 0x70);
-  }
+    contador_yield(50000000, 2, 0x2F);
 }
 
 static void contador2() {
-  while (1) {
-    vga_write("kern2 testing.............", 3, 0x70);
-  }
+    contador_yield(50000000, 3, 0x6F);
 }
 
 static void contador3() {
-  while (1) {
-    vga_write("kern2 testing.............", 4, 0x70);
-  }
+    contador_yield(50000000, 4, 0x4F);
 }
 
 void contador_spawn() {

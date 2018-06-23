@@ -42,7 +42,7 @@ void sched_init() {
     current->frame->edi = 0;
     current->frame->esi = 0;
     current->frame->ebp = 0;
-    current->frame->esp = 0;
+    current->frame->esp = current->frame;
     current->frame->ebx = 0;
     current->frame->edx = 0;
     current->frame->ecx = 0;
@@ -60,10 +60,13 @@ void spawn(void (*entry)(void)) {
     while (Tasks[index].status != FREE) {
       index++;
     }
+    uint8_t* stack = &Tasks[index].stack[4096];
+    Tasks[index].frame = stack - sizeof(struct TaskFrame);
+
     Tasks[index].frame->edi = 0;
     Tasks[index].frame->esi = 0;
     Tasks[index].frame->ebp = 0;
-    Tasks[index].frame->esp = 0;
+    Tasks[index].frame->esp = Tasks[index].frame;
     Tasks[index].frame->ebx = 0;
     Tasks[index].frame->edx = 0;
     Tasks[index].frame->ecx = 0;
