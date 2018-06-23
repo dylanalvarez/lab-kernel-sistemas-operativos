@@ -6,7 +6,7 @@ GCC_PATH := /usr/lib/gcc/x86_64-linux-gnu/5
 CFLAGS += -I$(GCC_PATH)/include -I$(GCC_PATH)/include-fixed
 LIBGCC := $(shell $(CC) $(CFLAGS) -print-libgcc-file-name)
 
-kern2: boot.o kern2.o write.o lib/string.o stacks.o tasks.o funcs.o contador.o interrupts.o idt_entry.o handler.o
+kern2: boot.o kern2.o write.o lib/string.o stacks.o tasks.o funcs.o contador.o interrupts.o idt_entry.o handler.o sched.o
 	ld -m elf_i386 -Ttext 0x100000 --entry _start $^ $(LIBGCC) -o $@
 	# Verificar imagen Multiboot v1.
 	grub-file --is-x86-multiboot $@

@@ -1,4 +1,5 @@
 #include "decls.h"
+#include "sched.h"
 #include "multiboot.h"
 #include <string.h>
 
@@ -87,26 +88,52 @@ void two_stacks_c() {
         : "r"(b), "r"(vga_write));
 }
 
+static void contador1() {
+  while (1) {
+    vga_write("kern2 testing.............", 2, 0x70);
+  }
+}
+
+static void contador2() {
+  while (1) {
+    vga_write("kern2 testing.............", 3, 0x70);
+  }
+}
+
+static void contador3() {
+  while (1) {
+    vga_write("kern2 testing.............", 4, 0x70);
+  }
+}
+
+void contador_spawn() {
+    spawn(contador1);
+    spawn(contador2);
+    spawn(contador3);
+}
+
 void kmain(const multiboot_info_t *mbi) {
     int8_t linea;
     uint8_t color;
-    
+
     vga_write("kern2 loading.............", 8, 0x70);
     two_stacks();
     two_stacks_c();
     print_cmdline(mbi);
     print_memory_size(mbi);
 
+    sched_init();
     // Código ejercicio kern2-idt.
     idt_init();
     irq_init();
     asm("int3");
-    
+
     asm("div %4"
     : "=a"(linea), "=c"(color)
     : "0"(18), "1"(0xE0), "b"(1), "d"(0));
     vga_write2("Funciona vga_write2?", linea, color);
     //vga_write2("Funciona vga_write2?", 18, 0xE0);
-    
+    contador_spawn();
+
     contador_run();
 }

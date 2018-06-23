@@ -24,7 +24,7 @@ static void exit() {
     if (tmp) task_swap(&tmp);
 }
 
-static void contador_yield(unsigned lim, uint8_t linea, char color) {
+void contador_yield(unsigned lim, uint8_t linea, char color) {
     char counter[COUNTLEN] = {'0'};  // ASCII digit counter (RTL).
 
     while (lim--) {
@@ -58,21 +58,21 @@ void contador_run() {
     // Configurar stack1 y stack2 con los valores apropiados.
     uintptr_t *a = (uintptr_t *) &stack1[USTACK_SIZE - 1];
     uintptr_t *b = (uintptr_t *) &stack2[USTACK_SIZE - 1];
-    
+
     // contador_yield(100, 0, 0x2F);
     a -= 3;
     a[0] = 100;     // 3 function arguments
     a[1] = 0;
     a[2] = 0x2F;
-    
+
     // contador_yield(100, 1, 0x4F);
     b -= 9;
-    b[0] = 0;       // space needed for later 
+    b[0] = 0;       // space needed for later
     b[1] = 0;       // popping the 4 callee
     b[2] = 0;       // saved registers
     b[3] = 0;
 
-    
+
     b[4] = (uintptr_t) contador_yield; // task_swap will return
                                        // to this addr
     b[5] = (uintptr_t) exit;           // contador_yield will
@@ -80,12 +80,11 @@ void contador_run() {
     b[6] = 50;     // 3 function arguments
     b[7] = 1;
     b[8] = 0x4F;
-    
+
     // Actualizar la variable estática ‘esp’ para que apunte
     // al del segundo contador.
     esp = (uintptr_t) b;
-    
+
     // Lanzar el primer contador con task_exec.
     task_exec((uintptr_t) contador_yield, (uintptr_t) a);
 }
-

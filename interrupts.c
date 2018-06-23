@@ -2,7 +2,7 @@
 #include "interrupts.h"
 #define outb(port, data) \
         asm("outb %b0,%w1" : : "a"(data), "d"(port));
-        
+
 static struct IDTR idtr;
 static struct Gate idt[256];
 extern void breakpoint();
@@ -24,7 +24,7 @@ void idt_init() {
 
 // Multiboot siempre define "8" como el segmento de código.
 // (Ver campo CS en `info registers` de QEMU.)
-static const uint8_t KSEG_CODE = 8;
+static const uint8_t KSEG_CODE = CODE_SEGMENT;
 
 // Identificador de "Interrupt gate de 32 bits" (ver IA32-3A,
 // tabla 6-2: IDT Gate Descriptors).
@@ -59,7 +59,7 @@ static void irq_remap() {
 void irq_init() {
     // (1) Redefinir códigos para IRQs.
     irq_remap();
-    
+
     // (2) Instalar manejadores.
     idt_install(T_TIMER, timer_asm);
     // idt_install(T_KEYBOARD, divzero);

@@ -5,6 +5,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 
+#define INTERRUPT_ENABLE_FLAG 0x200
+#define CODE_SEGMENT 8
+
 // write.c (función de kern0-vga copiada no-static).
 void vga_write(const char *s, int8_t linea, uint8_t color);
 
@@ -25,5 +28,7 @@ void idt_init();
 void irq_init();
 
 void idt_install(uint8_t n, void (*handler)(void));
+
+void contador_yield(unsigned lim, uint8_t linea, char color);
 
 #endif
