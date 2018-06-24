@@ -32,3 +32,4 @@ void idt_install(uint8_t n, void (*handler)(void));
 void contador_yield(unsigned lim, uint8_t linea, char color);
 
 #endif
+

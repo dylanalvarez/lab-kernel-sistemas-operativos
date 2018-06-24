@@ -131,3 +131,4 @@ void kmain(const multiboot_info_t *mbi) {
 
     contador_run();
 }
+

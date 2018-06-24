@@ -6,21 +6,6 @@
 static struct Task Tasks[MAX_TASK];
 static struct Task *current;
 
-uint32_t edi;
-uint32_t esi;
-uint32_t ebp;
-uint32_t esp;
-uint32_t ebx;
-uint32_t edx;
-uint32_t ecx;
-uint32_t eax;
-/* below here defined by x86 hardware */
-uint32_t eip;
-uint16_t cs;
-uint16_t padding;
-uint32_t eflags;
-
-
 void sched_init() {
     for (int i = 0; i < MAX_TASK; i++) {
       Tasks[i].status = FREE;
@@ -71,3 +56,4 @@ void sched(struct TaskFrame *tf) {
       : "g"(current->frame)
       : "memory");
 }
+
