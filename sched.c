@@ -11,8 +11,8 @@ void sched_init() {
       Tasks[i].status = FREE;
       Tasks[i].pid = i;
     }
-    spawn(0);
     current = &Tasks[0];
+    current->frame = (struct TaskFrame *) (&Tasks[0].stack[4096]);
     current->status = RUNNING;
 }
 
